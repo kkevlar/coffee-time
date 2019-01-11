@@ -1,34 +1,28 @@
 
 
-BOARD_TAG = nano328
-BOARDS_TXT=/usr/share/arduino/hardware/arduino/boards.txt
-PROJECT_DIR = .
-ARDMK_DIR=../Arduino-Makefile
-# all: inoup
+all: ino inomake
 
-# inoup: inobuild
-# 	cd nano; ino upload -m nano
+ino:
+	mkdir ino
 
-# nano/src:
-# 	cd nano; ino init
-# 	cd nano/src; rm -rf *
+ino/Makefile: | ino
+	cp INO-Makefile ino/Makefile
 
-# inobuild: nano nano/src nano/src/coffee.c nano/src/coffee.h
-# 	cd nano; ino clean ; ino build -m nano328
+ino/Arduino-Makefile: | ino
+	cd ino && git clone git@github.com:sudar/Arduino-Makefile.git
 
-# nano/src/coffee.c: coffee.c
-# 	cp coffee.c nano/src/coffee.c
+ino/coffee.c: coffee.c | ino
+	cp coffee.c ino
 
-# nano/src/coffee.h: coffee.h
-# 	cp coffee.h nano/src/coffee.h
+ino/coffee.h: coffee.h | ino
+	cp coffee.h ino
 
-# nano:
-# 	mkdir nano328
-# 	cd nano; rm -rf *
+inomake: ino/Makefile ino/coffee.c ino/coffee.h  | ino ino/Arduino-Makefile 
+	cd ino && make
 
-# clean:
-# 	rm -f *.o
-# 	rm -rf nano
+upload: inomake
+	cd ino && make upload
 
-include $(ARDMK_DIR)/Arduino.mk
+clean:
+	rm -rf ino
 
