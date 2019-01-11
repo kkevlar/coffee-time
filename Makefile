@@ -5,19 +5,19 @@ all: ino inomake
 ino:
 	mkdir ino
 
-ino/Makefile: | ino
+ino/Makefile: INO-Makefile | ino
 	cp INO-Makefile ino/Makefile
 
 ino/Arduino-Makefile: | ino
 	cd ino && git clone git@github.com:sudar/Arduino-Makefile.git
 
-ino/coffee.c: coffee.c | ino
-	cp coffee.c ino
+ino/coffee.cpp: coffee.cpp | ino
+	python3 timetill9am.py | sed -r 's;(.*);cat coffee.cpp | sed -r "s:FUTURE_SECONDS:\1*1000:" > ino/coffee.cpp;' | bash
 
-ino/coffee.h: coffee.h | ino
-	cp coffee.h ino
+ino/coffee.hpp: coffee.hpp | ino
+	cp coffee.hpp ino
 
-inomake: ino/Makefile ino/coffee.c ino/coffee.h  | ino ino/Arduino-Makefile 
+inomake: ino/Makefile ino/coffee.cpp ino/coffee.hpp  | ino ino/Arduino-Makefile 
 	cd ino && make
 
 upload: inomake

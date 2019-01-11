@@ -1,6 +1,6 @@
 
-
-BOARD_TAG = nano328
+ARDUINO_LIBS = Servo
+BOARD_TAG = uno
 BOARDS_TXT=/usr/share/arduino/hardware/arduino/boards.txt
 PROJECT_DIR = .
 ARDMK_DIR=Arduino-Makefile

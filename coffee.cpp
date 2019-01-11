@@ -1,4 +1,16 @@
-#include "coffee.h"
+#include "coffee.hpp"
+
+Servo s;
+
+void boil()
+{
+	s.write(180);
+}
+
+void noboil()
+{
+	s.write(0);
+}
 
 void coffee()
 {
@@ -10,7 +22,7 @@ void coffee()
 
 	duration_on = 1000*3600;
 	duration_off_again = 23*3600*1000;
-	duration_off_init = 1*1000;
+	duration_off_init = FUTURE_SECONDS;
 
 	earlier_time = millis();
 	while(1)
@@ -19,7 +31,7 @@ void coffee()
 		if(later_time - earlier_time > duration_off_init)
 		{
 			earlier_time = millis();
-			digitalWrite(A2,HIGH);
+			boil();
 			break;
 		}
 	}
@@ -31,7 +43,7 @@ void coffee()
 			if(later_time - earlier_time > duration_on)
 			{
 				earlier_time = millis();
-				digitalWrite(A2,LOW);
+				noboil();
 				break;
 			}
 		}
@@ -41,7 +53,7 @@ void coffee()
 			if(later_time - earlier_time > duration_off_again)
 			{
 				earlier_time = millis();
-				digitalWrite(A2,HIGH);
+				boil();
 				break;
 			}
 		}
@@ -53,35 +65,20 @@ void coffee()
 void setup() 
 {
 	pinMode(A2,OUTPUT);
-
-	delay(500);
-	digitalWrite(A2,LOW);
-	delay(500);
-	digitalWrite(A2,HIGH);
-	delay(500);
-	digitalWrite(A2,LOW);
-	delay(500);
-	digitalWrite(A2,HIGH);
-	delay(500);
-	digitalWrite(A2,LOW);
-	delay(500);
-
-
-	coffee();
-
-	for(int i = 0; i < 120; i++)
-	{
-		delay(60000);
-	}
-
-	digitalWrite(A2,LOW);
-
 }
 
 void loop() 
 {
+	s.attach(3);
+	delay(2000);
+	noboil();
+	delay(2000);
+	boil();
+	delay(2000);
+	noboil();
+	delay(2000);
 
-	delay(1000);
 
+	coffee();
 }
 
