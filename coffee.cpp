@@ -28,6 +28,8 @@ void coffee()
 	duration_off_again = 23*1000;
 	duration_off_init = FUTURE_SECONDS;
 
+	duration_off_init -= 8*60;
+
 	duration_on *= 1000;
 	duration_off_init *= 1000;
 	duration_off_again *= 3600;
@@ -59,7 +61,7 @@ void coffee()
 				boil();
 				for(int z = 0; z < 60; z++)
 				{
-				delay(5 * 1000);
+				delay(3 * 1000);
 				}
 			}
 		}

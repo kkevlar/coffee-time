@@ -1,5 +1,5 @@
 
-ARDUINO_LIBS = Servo
+ARDUINO_LIBS = Servo IRremote LiquidCrystal
 BOARD_TAG = uno
 BOARDS_TXT=/usr/share/arduino/hardware/arduino/boards.txt
 PROJECT_DIR = .

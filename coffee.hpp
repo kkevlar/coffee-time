@@ -4,6 +4,8 @@
 
 #include <Arduino.h>
 #include <Servo.h>
+#include <LiquidCrystal.h>
+#include <IRremote.h>
 
 void setup();
 void loop();
