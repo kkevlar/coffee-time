@@ -1,19 +1,28 @@
 #include "coffee.hpp"
 
 Servo s;
+LiquidCrystal lcd(2,3,4,5,6,7);
 
 void boil()
 {
 	s.write(180);
-	delay(2000);
+	delay(500);
 	s.write(90);
 }
 
 void noboil()
 {
 	s.write(0);
-	delay(2000);
+	delay(500);
 	s.write(90);
+}
+
+void format_time_string(char* buf, unsigned long secs)
+{
+	uint8_t h = secs / 3600;
+	uint8_t m = (secs / 60) % 60;
+	uint8_t s = secs % 60;
+	sprintf(buf,"%u:%02u:%02u", h, m, s);
 }
 
 void coffee()
@@ -23,12 +32,13 @@ void coffee()
 	unsigned long duration_on;
 	unsigned long duration_off_init;
 	unsigned long duration_off_again;
+	unsigned long duration_temp;
 
 	duration_on = 1000;
 	duration_off_again = 23*1000;
 	duration_off_init = FUTURE_SECONDS;
 
-	duration_off_init -= 8*60;
+	// duration_off_init -= 8*60;
 
 	duration_on *= 1000;
 	duration_off_init *= 1000;
@@ -43,6 +53,17 @@ void coffee()
 			earlier_time = millis();
 			boil();
 			break;
+		}
+		else
+		{
+			lcd.clear();
+			char buf[16];
+			duration_temp = duration_off_init;
+			duration_temp -= later_time;
+			duration_temp /= 1000;
+			format_time_string(buf,duration_temp);
+			lcd.print(buf);
+			delay(500);
 		}
 	}
 	while(1)
@@ -61,7 +82,7 @@ void coffee()
 				boil();
 				for(int z = 0; z < 60; z++)
 				{
-				delay(3 * 1000);
+				delay(5 * 1000);
 				}
 			}
 		}
@@ -74,6 +95,18 @@ void coffee()
 				boil();
 				break;
 			}
+			else
+			{
+				lcd.clear();
+				char buf[16];
+				duration_temp = duration_off_again;
+				duration_temp -= later_time;
+				duration_temp += earlier_time;
+				duration_temp /= 1000;
+				format_time_string(buf,duration_temp);
+				lcd.print(buf);
+				delay(500);
+			}
 		}
 	}
 
@@ -82,27 +115,32 @@ void coffee()
 
 void setup() 
 {
-	pinMode(A2,OUTPUT);
+	lcd.begin(16, 2);
+
+	lcd.clear();
+
+	lcd.print("hello world");
+	s.attach(9);
 }
+
 
 void loop() 
 {
-	s.attach(3);
-	delay(3000);
+	delay(1000);
 	noboil();
-	delay(3000);
+	delay(1000);
 	boil();
-	delay(3000);
+	delay(1000);
 	noboil();
-	delay(3000);
+	delay(1000);
 	boil();
-	delay(3000);
+	delay(1000);
 	noboil();
-	delay(3000);
+	delay(1000);
 	boil();
-	delay(3000);
+	delay(1000);
 	noboil();
-	delay(3000);
+	delay(1000);
 
 	coffee();
 }
