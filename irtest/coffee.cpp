@@ -3,6 +3,21 @@
 
 #include "IRremote.h"
 
+
+/*
+power 3772793023
+1 3772784863
+2 3772817503
+3 3772801183
+4 3772780783
+5 3772813423
+6 3772797103
+7 3772788943
+8 3772821583
+9 3772805263
+0 3772811383
+*/
+
 /*-----( Declare Constants )-----*/
 int receiver = 11; // pin 1 of IR receiver to Arduino digital pin 11
 
@@ -113,7 +128,8 @@ void translateIR()
     break;
 
   default: 
-    Serial.println(" other button   ");
+    Serial.print(" other button   ");
+    Serial.println(results.value);
 
   }
 
